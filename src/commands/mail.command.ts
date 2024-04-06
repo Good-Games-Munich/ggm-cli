@@ -1,9 +1,10 @@
 import { CSVParserService } from '../services/csv-parser.service';
 import { MailService } from '../services/mail.service';
-import { TemplateService } from '../services/template.service';
 import { Spinner } from '../util/spinner.helper';
 import { defineCommand } from 'citty';
-import { toDate } from 'date-fns';
+import { format, toDate } from 'date-fns';
+import { de } from 'date-fns/locale';
+import dedent from 'dedent-js';
 
 const sepaRefCommand = defineCommand({
     meta: {
@@ -31,7 +32,6 @@ const sepaRefCommand = defineCommand({
         }
 
         const csvParserService = new CSVParserService();
-        const templateService = new TemplateService();
         const mailService = MailService.getInstance();
 
         const recipientsData = await csvParserService.parseSepaRefCSV(inputCSV);
@@ -43,11 +43,20 @@ const sepaRefCommand = defineCommand({
             try {
                 spinner.start(`Sending mail to \u001B[36m${recipient.email}\u001B[0m`);
 
-                const template = await templateService.getSepaRefTemplate({
-                    ...recipient,
-                    paymentStartDate: parsedPaymentStartDate,
-                });
-                await mailService.sendMail(recipient.email, template.subject, template.body);
+                await mailService.sendMail(
+                    recipient.email,
+                    'Deine SEPA-Referenznummer',
+                    dedent`Hi ${recipient.name},
+
+                    wir möchten dich darüber informieren, dass wir ab dem ${format(parsedPaymentStartDate, 'dd MMM yyyy', { locale: de })} einen Mitgliedsbeitrag von ${recipient.amount} € abbuchen werden.
+
+                    Der Mitgliedsbeitrag wird per SEPA-Lastschrift von deinem Konto ${recipient.iban} mit der Mandatsreferenznummer ${recipient.sepaRef} und der Gläubiger-Identifikationsnummer DE79ZZZ00002684380 eingezogen.
+
+                    Viele Grüße
+
+                    Dein Good Games Munich Vorstand
+                    `,
+                );
 
                 spinner.done(`Mail to \u001B[36m${recipient.email}\u001B[0m sent`);
             } catch (error) {

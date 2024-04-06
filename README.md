@@ -63,6 +63,7 @@ The CSV-File should have the following columns:
 ## TODO
 
 - [ ] Make it association agnostic
+- [ ] Offer compiled binaries
 
 <!-- CONTRIBUTING -->
 

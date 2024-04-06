@@ -1,0 +1,33 @@
+{
+  "name": "ggm-cli",
+  "module": "src/ggm.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@beuluis/eslint-config": "^2.0.1",
+    "@types/bun": "latest",
+    "eslint": "8",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,json,yml,yaml}": [
+      "eslint"
+    ]
+  },
+  "dependencies": {
+    "@types/nodemailer": "^6.4.14",
+    "citty": "^0.1.6",
+    "csv-simple-parser": "^1.0.3",
+    "date-fns": "^3.6.0",
+    "dedent-js": "^1.0.1",
+    "nodemailer": "^6.9.13",
+    "zod": "^3.22.4"
+  }
+}

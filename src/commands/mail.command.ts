@@ -7,22 +7,22 @@ import { de } from 'date-fns/locale';
 import dedent from 'dedent-js';
 
 const sepaRefCommand = defineCommand({
-    meta: {
-        name: 'sepaRef',
-        description: 'Sends out SEPA reference numbers to recipients',
-    },
     args: {
         inputCSV: {
             description: 'CSV file of recipients',
-            type: 'positional',
             required: true,
+            type: 'positional',
         },
         paymentStartDate: {
             description: 'Payment start date',
+            required: true,
             type: 'string',
             valueHint: 'YYYY-MM-DD',
-            required: true,
         },
+    },
+    meta: {
+        description: 'Sends out SEPA reference numbers to recipients',
+        name: 'sepaRef',
     },
     run: async ({ args: { inputCSV, paymentStartDate } }) => {
         const parsedPaymentStartDate = toDate(paymentStartDate);
@@ -81,8 +81,8 @@ const sepaRefCommand = defineCommand({
 
 export default defineCommand({
     meta: {
-        name: 'mail',
         description: 'Sends mails',
+        name: 'mail',
     },
     subCommands: {
         sepaRef: sepaRefCommand,

@@ -13,13 +13,13 @@ export class MailService {
         }
 
         this.transport = createTransport({
+            auth: {
+                pass: password,
+                user: 'info@ggmunich.de',
+            },
             host: 'mail.ggmunich.de',
             port: 465,
             secure: true,
-            auth: {
-                user: 'info@ggmunich.de',
-                pass: password,
-            },
         });
     }
 
@@ -34,9 +34,9 @@ export class MailService {
     public readonly sendMail = async (recipient: string, subject: string, body: string) => {
         return await this.transport.sendMail({
             from: 'info@ggmunich.de',
-            to: recipient,
             subject,
             text: body,
+            to: recipient,
         });
     };
 }

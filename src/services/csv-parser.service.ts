@@ -2,17 +2,17 @@ import parse from 'csv-simple-parser';
 import { z } from 'zod';
 
 const SepaRefCSVSchema = z.object({
-    name: z.string().trim(),
+    amount: z
+        .string()
+        .trim()
+        .regex(/^(?!0\d)\d*(?:\.\d{3})*$/u),
     email: z.string().trim().email(),
     iban: z
         .string()
         .trim()
         .toUpperCase()
-        .transform(iban => iban.replaceAll(/\s/gu, '')),
-    amount: z
-        .string()
-        .trim()
-        .regex(/^(?!0\d)\d*(?:\.\d{3})*$/u),
+        .transform((iban) => iban.replaceAll(/\s/gu, '')),
+    name: z.string().trim(),
     sepaRef: z.string().trim(),
 });
 
